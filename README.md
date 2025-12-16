@@ -17,6 +17,6 @@ poetry add pydantic-settings
 poetry add sqlalchemy
 poetry add alembic
 poetry add "sqlalchemy[asyncio]"
-
+alembic init migrations
 ```
 
