@@ -4,7 +4,10 @@ from books import Book
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from madr_postgres.db.base import table_registry
 
+
+@table_registry.mapped
 class Author:
     __tablename__ = 'authors'
 

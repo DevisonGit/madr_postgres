@@ -3,7 +3,10 @@ from datetime import datetime
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
+from madr_postgres.db.base import table_registry
 
+
+@table_registry.mapped
 class User:
     __tablename__ = 'users'
 
