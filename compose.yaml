@@ -1,0 +1,29 @@
+services:
+  madr_postgres_database:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - '$$PORT_DB:$$PORT_DB'
+    healthcheck:
+      test: ['CMD-SHELL', 'ps_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  madr_postgres_app:
+    image: madr_app
+    entrypoint: ./entrypoint.sh
+    build: .
+    ports:
+      - '$$PORT_APP:$$PORT_APP'
+    depends_on:
+      - madr_postgres_database
+    env_file:
+      - .env
+
+
+volumes:
+  pgdata:
