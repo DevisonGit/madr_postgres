@@ -17,7 +17,10 @@ poetry add pydantic-settings
 poetry add sqlalchemy
 poetry add alembic
 poetry add "sqlalchemy[asyncio]"
+poetry add "psycopg[binary]"
 alembic init migrations
 chmod +x entrypoint.sh 
+alembic revision --autogenerate -m 'create tables'
+alembic upgrade head
 ```
 

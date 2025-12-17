@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from madr_postgres.db.base import table_registry
 
 
-@table_registry.mapped
+@table_registry.mapped_as_dataclass
 class User:
     __tablename__ = 'users'
 

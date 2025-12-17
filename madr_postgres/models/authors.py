@@ -1,13 +1,13 @@
 from datetime import datetime
 
-from books import Book
+
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from madr_postgres.db.base import table_registry
+from .books import Book
 
-
-@table_registry.mapped
+@table_registry.mapped_as_dataclass
 class Author:
     __tablename__ = 'authors'
 

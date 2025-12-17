@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     ports:
-      - '$$PORT_DB:$$PORT_DB'
+      - '${PORT_DB}:${PORT_DB}'
     healthcheck:
       test: ['CMD-SHELL', 'ps_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
       interval: 5s
@@ -18,7 +18,7 @@ services:
     entrypoint: ./entrypoint.sh
     build: .
     ports:
-      - '$$PORT_APP:$$PORT_APP'
+      - '${PORT_APP}:${PORT_APP}'
     depends_on:
       - madr_postgres_database
     env_file:
