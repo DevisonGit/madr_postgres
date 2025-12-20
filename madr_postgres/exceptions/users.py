@@ -7,3 +7,7 @@ class UserNotFound(MadrError):
 
 class UserAlreadyExists(MadrError):
     pass
+
+
+class UserNotPermission(MadrError):
+    pass

@@ -22,5 +22,9 @@ alembic init migrations
 chmod +x entrypoint.sh 
 alembic revision --autogenerate -m 'create tables'
 alembic upgrade head
+poetry add --group dev factory-boy
+poetry add pyjwt
+poetry add --group dev freezegun
+poetry add "pwdlib[argon2]"
 ```
 
