@@ -26,5 +26,6 @@ poetry add --group dev factory-boy
 poetry add pyjwt
 poetry add --group dev freezegun
 poetry add "pwdlib[argon2]"
+gh secret set -f .env
 ```
 
