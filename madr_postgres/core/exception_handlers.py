@@ -10,7 +10,7 @@ def register_exception_handlers(app):
     @app.exception_handler(UserNotFound)
     async def user_not_found_handler(_: Request, exc: UserNotFound):
         return JSONResponse(
-            status_code=HTTPStatus.BAD_REQUEST,
+            status_code=HTTPStatus.NOT_FOUND,
             content={'detail': 'User not found'},
         )
 

@@ -10,13 +10,20 @@ from testcontainers.postgres import PostgresContainer
 
 from madr_postgres.app import app
 from madr_postgres.db.base import table_registry
+from madr_postgres.db.database import get_session
 from madr_postgres.models.authors import Author
 
 
 @pytest.fixture
-def client():
-    client = TestClient(app)
-    return client
+def client(session):
+    def get_session_override():
+        return session
+
+    with TestClient(app) as client:
+        app.dependency_overrides[get_session] = get_session_override
+        yield client
+
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture(scope='session')

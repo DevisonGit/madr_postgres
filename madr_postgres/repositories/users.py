@@ -27,3 +27,6 @@ class UserRepository:
 
     async def read_by_id(self, user_id: int):
         return await self.session.get(User, user_id)
+
+    async def patch(self, user: User):
+        return await self.create(user)
