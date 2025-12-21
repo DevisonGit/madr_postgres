@@ -9,9 +9,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from testcontainers.postgres import PostgresContainer
 
 from madr_postgres.app import app
+from madr_postgres.core.security import get_password_hash
 from madr_postgres.db.base import table_registry
 from madr_postgres.db.database import get_session
 from madr_postgres.models.authors import Author
+from tests.users.factory import UserFactory
 
 
 @pytest.fixture
@@ -71,3 +73,40 @@ async def author(session):
     await session.refresh(author)
 
     return author
+
+
+@pytest_asyncio.fixture
+async def user(session):
+    password = 'test@secret'
+    user = UserFactory(password=get_password_hash(password))
+
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+
+    user.clean_password = password
+
+    return user
+
+
+@pytest_asyncio.fixture
+async def other_user(session):
+    password = 'test@secret'
+    user = UserFactory(password=get_password_hash(password))
+
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+
+    user.clean_password = password
+
+    return user
+
+
+@pytest.fixture
+def token(client, user):
+    response = client.post(
+        '/auth/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
+    return response.json()['access_token']

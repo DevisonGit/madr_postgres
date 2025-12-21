@@ -21,12 +21,9 @@ class UserRepository:
             )
         )
 
-    async def delete(self, user_id: int):
-        await self.session.delete(user_id)
+    async def delete(self, user: User):
+        await self.session.delete(user)
         return await self.session.commit()
-
-    async def read_by_id(self, user_id: int):
-        return await self.session.get(User, user_id)
 
     async def patch(self, user: User):
         return await self.create(user)

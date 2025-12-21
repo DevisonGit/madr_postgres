@@ -2,7 +2,6 @@ from sqlalchemy.exc import IntegrityError
 
 from madr_postgres.exceptions.users import (
     UserAlreadyExists,
-    UserNotFound,
     UserNotPermission,
 )
 from madr_postgres.models.users import User
@@ -35,10 +34,7 @@ class UserService:
     async def delete_user(self, user_id: int, current_user: User):
         if current_user.id != user_id:
             raise UserNotPermission()
-        user = await self.repo.read_by_id(user_id)
-        if not user:
-            raise UserNotFound()
-        await self.repo.delete(user)
+        await self.repo.delete(current_user)
         return {'message': 'User deleted'}
 
     async def patch_user(
@@ -46,19 +42,15 @@ class UserService:
     ):
         if current_user.id != user_id:
             raise UserNotPermission()
-        db_user = await self.repo.read_by_id(user_id)
-
-        if not db_user:
-            raise UserNotFound()
 
         for key, value in user.model_dump(exclude_unset=True).items():
-            setattr(db_user, key, value)
+            setattr(current_user, key, value)
 
-        db_user.username = sanitize_string(db_user.username)
+        current_user.username = sanitize_string(current_user.username)
         if user.password:
-            db_user.password = get_password_hash(user.password)
+            current_user.password = get_password_hash(user.password)
 
         try:
-            return await self.repo.patch(db_user)
+            return await self.repo.patch(current_user)
         except IntegrityError:
             raise UserAlreadyExists('Username or email')
