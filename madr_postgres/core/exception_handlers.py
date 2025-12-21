@@ -7,6 +7,7 @@ from madr_postgres.exceptions.auth import (
     AuthCredentialValidate,
     AuthUnauthorized,
 )
+from madr_postgres.exceptions.base import AlreadyExists, NotFound
 from madr_postgres.exceptions.users import (
     UserAlreadyExists,
     UserNotPermission,
@@ -40,4 +41,18 @@ def register_exception_handlers(app):
         return JSONResponse(
             status_code=HTTPStatus.UNAUTHORIZED,
             content={'detail': 'Not enough permissions'},
+        )
+
+    @app.exception_handler(AlreadyExists)
+    async def already_exists_handler(_: Request, exc: AlreadyExists):
+        return JSONResponse(
+            status_code=HTTPStatus.CONFLICT,
+            content={'detail': f'{exc} already exists in MADR'},
+        )
+
+    @app.exception_handler(NotFound)
+    async def not_found_handler(_: Request, exc: NotFound):
+        return JSONResponse(
+            status_code=HTTPStatus.NOT_FOUND,
+            content={'detail': f'{exc} not found in MADR'},
         )
