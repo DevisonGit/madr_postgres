@@ -9,7 +9,9 @@ from madr_postgres.repositories import users as users_repo
 from madr_postgres.services import auth, users
 
 from ..repositories.authors import AuthorRepository
+from ..repositories.books import BookRepository
 from ..services.authors import AuthorService
+from ..services.books import BookService
 
 Session = Annotated[AsyncSession, Depends(get_session)]
 
@@ -27,3 +29,8 @@ def get_auth_service(session: Session):
 def get_author_service(session: Session):
     repo = AuthorRepository(session)
     return AuthorService(repo)
+
+
+def get_book_service(session: Session):
+    repo = BookRepository(session)
+    return BookService(repo)

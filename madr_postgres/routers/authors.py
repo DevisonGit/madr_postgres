@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query
 
-from madr_postgres.deps.aliases import AuthorServiceDep
+from madr_postgres.deps.aliases import AuthorServiceDep, CurrentUser
 from madr_postgres.schemas.authors import (
     AuthorCreate,
     AuthorList,
@@ -16,7 +16,9 @@ router = APIRouter(prefix='/authors', tags=['authors'])
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=AuthorPublic)
-async def create_author(data: AuthorCreate, service: AuthorServiceDep):
+async def create_author(
+    data: AuthorCreate, service: AuthorServiceDep, user: CurrentUser
+):
     return await service.create_author(data)
 
 
@@ -27,13 +29,18 @@ async def read_by_id(author_id: int, service: AuthorServiceDep):
 
 @router.patch('/{author_id}', response_model=AuthorPublic)
 async def patch_author(
-    author_id: int, data: AuthorCreate, service: AuthorServiceDep
+    author_id: int,
+    data: AuthorCreate,
+    service: AuthorServiceDep,
+    user: CurrentUser,
 ):
     return await service.patch_author(author_id, data)
 
 
 @router.delete('/{author_id}', response_model=Message)
-async def delete_author(author_id: int, service: AuthorServiceDep):
+async def delete_author(
+    author_id: int, service: AuthorServiceDep, user: CurrentUser
+):
     return await service.delete(author_id)
 
 

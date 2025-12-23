@@ -1,3 +1,8 @@
-from .aliases import AuthServiceDep, CurrentUser, UserServiceDep
+from .aliases import (
+    AuthServiceDep,
+    BookServiceDep,
+    CurrentUser,
+    UserServiceDep,
+)
 
-__all__ = ['UserServiceDep', 'AuthServiceDep', 'CurrentUser']
+__all__ = ['UserServiceDep', 'AuthServiceDep', 'CurrentUser', 'BookServiceDep']
