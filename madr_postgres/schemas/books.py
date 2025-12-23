@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import BaseModel, Field
 
 from madr_postgres.schemas.filter import FilterPage
@@ -19,7 +21,7 @@ class BookList(BaseModel):
 
 class FilterBook(FilterPage):
     title: str | None = Field(None, max_length=20)
-    year: int | None = Field(None, max_length=4)
+    year: int | None = Field(None, lt=datetime.datetime.now().year)
 
 
 class BookUpdate(BaseModel):

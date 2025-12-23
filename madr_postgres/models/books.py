@@ -12,7 +12,7 @@ class Book:
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     year: Mapped[int]
-    title: Mapped[str]
+    title: Mapped[str] = mapped_column(unique=True)
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
