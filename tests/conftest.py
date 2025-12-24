@@ -12,7 +12,7 @@ from madr_postgres.app import app
 from madr_postgres.core.security import get_password_hash
 from madr_postgres.db.base import table_registry
 from madr_postgres.db.database import get_session
-from madr_postgres.models.authors import Author
+from tests.authors.factory import AuthorFactory
 from tests.users.factory import UserFactory
 
 
@@ -66,16 +66,6 @@ def mock_db_time():
 
 
 @pytest_asyncio.fixture
-async def author(session):
-    author = Author(name='test')
-    session.add(author)
-    await session.commit()
-    await session.refresh(author)
-
-    return author
-
-
-@pytest_asyncio.fixture
 async def user(session):
     password = 'test@secret'
     user = UserFactory(password=get_password_hash(password))
@@ -110,3 +100,25 @@ def token(client, user):
         data={'username': user.email, 'password': user.clean_password},
     )
     return response.json()['access_token']
+
+
+@pytest_asyncio.fixture
+async def author(session):
+    author = AuthorFactory()
+
+    session.add(author)
+    await session.commit()
+    await session.refresh(author)
+
+    return author
+
+
+@pytest_asyncio.fixture
+async def other_author(session):
+    author = AuthorFactory()
+
+    session.add(author)
+    await session.commit()
+    await session.refresh(author)
+
+    return author
