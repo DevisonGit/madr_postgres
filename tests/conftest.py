@@ -13,6 +13,7 @@ from madr_postgres.core.security import get_password_hash
 from madr_postgres.db.base import table_registry
 from madr_postgres.db.database import get_session
 from tests.authors.factory import AuthorFactory
+from tests.books.factory import BookFactory
 from tests.users.factory import UserFactory
 
 
@@ -122,3 +123,25 @@ async def other_author(session):
     await session.refresh(author)
 
     return author
+
+
+@pytest_asyncio.fixture
+async def book(session, author):
+    book = BookFactory(author_id=author.id)
+
+    session.add(book)
+    await session.commit()
+    await session.refresh(book)
+
+    return book
+
+
+@pytest_asyncio.fixture
+async def other_book(session, author):
+    book = BookFactory(author_id=author.id)
+
+    session.add(book)
+    await session.commit()
+    await session.refresh(book)
+
+    return book
