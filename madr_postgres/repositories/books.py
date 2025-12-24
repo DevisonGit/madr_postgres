@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from madr_postgres.exceptions.base import AlreadyExists, NotFound
-from madr_postgres.models import Book
+from madr_postgres.models import Author, Book
 from madr_postgres.schemas.books import FilterBook
 
 
@@ -45,3 +45,9 @@ class BookRepository:
         return await self.session.scalars(
             query.offset(book_filter.offset).limit(book_filter.limit)
         )
+
+    async def validate_author(self, author_id):
+        author: Optional[Author] = await self.session.get(Author, author_id)
+        if not author:
+            raise NotFound('Author')
+        return author

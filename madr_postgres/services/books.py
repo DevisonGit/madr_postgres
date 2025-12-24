@@ -11,6 +11,7 @@ class BookService:
     async def create_book(self, data: BookCreate):
         book = Book(**data.model_dump())
         book.title = sanitize_string(book.title)
+        await self.repo.validate_author(book.author_id)
         return await self.repo.create(book)
 
     async def delete(self, book_id: int):
